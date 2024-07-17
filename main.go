@@ -18,7 +18,6 @@ func main() {
 	router.GET("/pizzas", getPizzas)
 	router.POST("/pizzas", postPizzas)
 	router.GET("/pizzas/:id", getPizzasByID)
-	router.DELETE("/pizzas/:id", deletePizzaByID)
 	router.Run()
 }
 
@@ -82,23 +81,4 @@ func savePizza() {
 	if err := encoder.Encode(pizzas); err != nil {
 		fmt.Println("Error encoding JSON:", err)
 	}
-}
-
-func deletePizzaByID(c *gin.Context) {
-	idParam := c.Param("id")
-	id, err := strconv.Atoi(idParam)
-	if err != nil {
-		c.JSON(400, gin.H{
-			"erro": err.Error()})
-		return
-	}
-	for i, p := range pizzas {
-		if p.ID == id {
-			pizzas = append(pizzas[:i], pizzas[i+1:]...)
-			savePizza()
-			c.JSON(200, gin.H{"message": "Pizza deleted"})
-			return
-		}
-	}
-	c.JSON(404, gin.H{"message": "Pizza not found"})
 }
