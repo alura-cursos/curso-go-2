@@ -8,10 +8,5 @@
         "id": 2,
         "nome": "Atum com queijo",
         "preco": 79.5
-    },
-    {
-        "id": 3,
-        "nome": "Atum com queijo Rust",
-        "preco": 39.5
     }
 ]
