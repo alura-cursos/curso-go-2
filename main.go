@@ -18,6 +18,10 @@ func main() {
 	router.GET("/pizzas", getPizzas)
 	router.POST("/pizzas", postPizzas)
 	router.GET("/pizzas/:id", getPizzasByID)
+	// deletar uma pizza
+	router.DELETE("/pizzas/:id", deletePizzaById)
+	// editar ou atualizar uma pizza
+	router.PUT("/pizzas/:id", updatePizzaByID)
 	router.Run()
 }
 
@@ -81,4 +85,12 @@ func savePizza() {
 	if err := encoder.Encode(pizzas); err != nil {
 		fmt.Println("Error encoding JSON:", err)
 	}
+}
+
+func deletePizzaById(c *gin.Context) {
+	c.JSON(200, gin.H{"method": "delete"})
+}
+
+func updatePizzaByID(c *gin.Context) {
+	c.JSON(200, gin.H{"method": "put"})
 }
