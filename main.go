@@ -18,9 +18,7 @@ func main() {
 	router.GET("/pizzas", getPizzas)
 	router.POST("/pizzas", postPizzas)
 	router.GET("/pizzas/:id", getPizzasByID)
-	// deletar uma pizza
 	router.DELETE("/pizzas/:id", deletePizzaById)
-	// editar ou atualizar uma pizza
 	router.PUT("/pizzas/:id", updatePizzaByID)
 	router.Run()
 }
@@ -108,5 +106,29 @@ func deletePizzaById(c *gin.Context) {
 }
 
 func updatePizzaByID(c *gin.Context) {
-	c.JSON(200, gin.H{"method": "put"})
+	idParam := c.Param("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"erro": err.Error()})
+		return
+	}
+
+	var updatedPizza models.Pizza
+	if err := c.ShouldBindJSON(&updatedPizza); err != nil {
+		c.JSON(400, gin.H{"erro": err.Error()})
+		return
+	}
+
+	for i, p := range pizzas {
+		if p.ID == id {
+			pizzas[i] = updatedPizza
+			pizzas[i].ID = id
+			savePizza()
+			c.JSON(200, pizzas[i])
+			return
+		}
+	}
+
+	c.JSON(404, gin.H{"method": "pizza not found"})
 }
